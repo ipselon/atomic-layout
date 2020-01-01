@@ -4,7 +4,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/kettanaito/atomic-layout/d10ba4587cf70cfacba05d8d71055520ff904d39/logo.svg?sanitize=true" width="200" alt="Atomic Layout logo" />
+  <img src="https://github.com/kettanaito/atomic-layout/blob/master/logo.svg" width="200" alt="Atomic Layout" />
 </p>
 
 <h1 align="center">Atomic Layout</h1>
@@ -125,7 +125,7 @@ There are some shortcuts to get you started:
   <tr>
     <td>
       <a href="https://www.youtube.com/watch?v=_HrXUB97xQs">
-        <img width="500" src="./materials/react-finland-thumbnail.jpg" alt="Artem speaking at React Finland" />
+        <img width="500" src="https://github.com/kettanaito/atomic-layout/blob/master/materials/react-finland-thumbnail.jpg" alt="Artem speaking at React Finland" />
       </a>
     </td>
     <td>
@@ -148,7 +148,7 @@ There are some shortcuts to get you started:
   <tr>
     <td>
       <a href="https://www.youtube.com/watch?v=x_93DjN_bUA">
-        <img width="500" src="./materials/react-vienna-thumbnail.jpg" alt="The Future of Layouts — Artem Zakharchenko" />
+        <img width="500" src="https://github.com/kettanaito/atomic-layout/blob/master/materials/react-vienna-thumbnail.jpg" alt="The Future of Layouts — Artem Zakharchenko" />
       </a>
     </td>
     <td>
@@ -177,7 +177,7 @@ Atomic Layout's browser support is made by the browser support of underlying tec
 
 Thank you for deciding to contribute! Your involvement makes a significant impact on the library and its future.
 
-**Please read the [Contribution guidelines](./.github/CONTRIBUTING.md)** to get familiar with the contributing process. The issues labeled [`help wanted`](https://github.com/kettanaito/atomic-layout/labels/help%20wanted) or [`good first issue`](https://github.com/kettanaito/atomic-layout/labels/good%20first%20issue) are a good place to start cooperating on Atomic Layout. Feature suggestions or bug reports, discussion, and pull requests are always welcome!
+**Please read the [Contribution guidelines](https://github.com/kettanaito/atomic-layout/blob/277-broken-README.md/.github/CONTRIBUTING.md)** to get familiar with the contributing process. The issues labeled [`help wanted`](https://github.com/kettanaito/atomic-layout/labels/help%20wanted) or [`good first issue`](https://github.com/kettanaito/atomic-layout/labels/good%20first%20issue) are a good place to start cooperating on Atomic Layout. Feature suggestions or bug reports, discussion, and pull requests are always welcome!
 
 [npm-url]: https://npmjs.com/package/atomic-layout
 [bundlephobia-url]: https://bundlephobia.com/result?p=atomic-layout
