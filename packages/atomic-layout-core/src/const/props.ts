@@ -48,6 +48,11 @@ type FlexboxOverflowAlignment = 'safe center' | 'unsafe center'
 
 export interface GenericProps {
   /**
+   * Polymorphic prop.
+   * @see https://styled-components.com/docs/api#as-polymorphic-prop
+   */
+  as?: keyof JSX.IntrinsicElements | React.ComponentType<any>
+  /**
    * Specifies direction of flex-items
    * @css `flex-direction`
    * @see https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
