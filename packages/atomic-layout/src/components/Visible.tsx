@@ -18,60 +18,75 @@ const VisibleContainer = styled(Box)<{ matches: boolean }>`
     `}
 `
 
-const Visible: React.FC<OnlyProps> = ({
-  children,
-  except,
-  for: exactBreakpointName,
-  from: minBreakpointName,
-  to: maxBreakpointName,
-  ...boxProps
-}) => {
-  const exactBreakpoint = resolveBreakpoint(exactBreakpointName)
-  const minBreakpoint = resolveBreakpoint(minBreakpointName)
-  const maxBreakpoint = resolveBreakpoint(maxBreakpointName)
+const Visible = React.forwardRef<unknown, OnlyProps>(
+  (
+    {
+      children,
+      except,
+      for: exactBreakpointName,
+      from: minBreakpointName,
+      to: maxBreakpointName,
+      ...boxProps
+    },
+    ref,
+  ) => {
+    const exactBreakpoint = resolveBreakpoint(exactBreakpointName)
+    const minBreakpoint = resolveBreakpoint(minBreakpointName)
+    const maxBreakpoint = resolveBreakpoint(maxBreakpointName)
 
-  let mediaQuery = exactBreakpoint
+    let mediaQuery = exactBreakpoint
 
-  // Bell, __/--\__
-  if (minBreakpoint && maxBreakpoint && !except) {
-    const { breakpoint } = mergeAreaRecords(
-      {
-        behavior: 'down',
-        breakpoint: maxBreakpoint,
-      },
-      {
-        behavior: 'up',
-        breakpoint: minBreakpoint,
-      },
-      false,
+    // Bell, __/--\__
+    if (minBreakpoint && maxBreakpoint && !except) {
+      const { breakpoint } = mergeAreaRecords(
+        {
+          behavior: 'down',
+          breakpoint: maxBreakpoint,
+        },
+        {
+          behavior: 'up',
+          breakpoint: minBreakpoint,
+        },
+        false,
+      )
+
+      mediaQuery = breakpoint
+    }
+
+    // Notch, --\__/--
+    if (minBreakpoint && maxBreakpoint && except) {
+      mediaQuery = [
+        closeBreakpoint(minBreakpoint),
+        openBreakpoint(maxBreakpoint),
+      ]
+    }
+
+    // High-pass, __/--
+    if (minBreakpoint && !maxBreakpoint) {
+      mediaQuery = openBreakpoint(minBreakpoint)
+    }
+
+    // Low-pass, --\__
+    if (!minBreakpoint && maxBreakpoint) {
+      mediaQuery = closeBreakpoint(maxBreakpoint)
+    }
+
+    const matches = useMediaQuery(mediaQuery)
+    const ariaHidden = !matches ? { 'aria-hidden': 'true' } : {}
+
+    return (
+      <VisibleContainer
+        ref={ref}
+        {...boxProps}
+        {...ariaHidden}
+        matches={matches}
+      >
+        {children}
+      </VisibleContainer>
     )
+  },
+)
 
-    mediaQuery = breakpoint
-  }
-
-  // Notch, --\__/--
-  if (minBreakpoint && maxBreakpoint && except) {
-    mediaQuery = [closeBreakpoint(minBreakpoint), openBreakpoint(maxBreakpoint)]
-  }
-
-  // High-pass, __/--
-  if (minBreakpoint && !maxBreakpoint) {
-    mediaQuery = openBreakpoint(minBreakpoint)
-  }
-
-  // Low-pass, --\__
-  if (!minBreakpoint && maxBreakpoint) {
-    mediaQuery = closeBreakpoint(maxBreakpoint)
-  }
-
-  const matches = useMediaQuery(mediaQuery)
-  const ariaHidden = !matches ? { 'aria-hidden': 'true' } : {}
-
-  return (
-    <VisibleContainer {...boxProps} {...ariaHidden} matches={matches}>
-      {children}
-    </VisibleContainer>
-  )
-}
+Visible.displayName = 'Visible'
 
 export default Visible

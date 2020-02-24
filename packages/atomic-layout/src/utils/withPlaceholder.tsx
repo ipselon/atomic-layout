@@ -11,13 +11,20 @@ export const withPlaceholder = (
   Component: AreaComponent,
   breakpoints: Breakpoint[],
 ) => {
-  const Placeholder: React.FC<GenericProps> = ({ children, ...restProps }) => {
+  const Placeholder = React.forwardRef<
+    unknown,
+    React.PropsWithChildren<GenericProps>
+  >(({ children, ...restProps }, ref) => {
     const PlaceholderComponent = breakpoints.reduce<JSX.Element[]>(
       (components, breakpoint, index) => {
         return components.concat(
-          <MediaQuery {...breakpoint} key={`${Component.displayName}_${index}`}>
+          <MediaQuery key={`${Component.displayName}_${index}`} {...breakpoint}>
             {(matches) =>
-              matches && <Component {...restProps}>{children}</Component>
+              matches && (
+                <Component ref={ref} {...restProps}>
+                  {children}
+                </Component>
+              )
             }
           </MediaQuery>,
         )
@@ -28,7 +35,7 @@ export const withPlaceholder = (
     // Wrapping in a Fragment due to a type issue
     // when returning JSX.Element[].
     return <>{PlaceholderComponent}</>
-  }
+  })
 
   Placeholder.displayName = `Placeholder(${Component.displayName})`
 

@@ -44,66 +44,78 @@ export const createWrapper = (
   wrapper: React.FC,
   children: React.ReactNode,
   props: BoxProps,
+  ref: React.Ref<unknown>,
 ) => (...breakpoints: Breakpoint[]) => {
   const Placeholder = withPlaceholder(wrapper, breakpoints)
-  return <Placeholder {...props}>{children}</Placeholder>
+  return (
+    <Placeholder ref={ref} {...props}>
+      {children}
+    </Placeholder>
+  )
 }
 
-const Only: React.FC<OnlyProps> = ({
-  children,
-  except,
-  for: exactBreakpointName,
-  from: minBreakpointName,
-  to: maxBreakpointName,
-  ...restProps
-}) => {
-  const wrapWith = createWrapper(Box, children, restProps)
+const Only = React.forwardRef<unknown, OnlyProps>(
+  (
+    {
+      children,
+      except,
+      for: exactBreakpointName,
+      from: minBreakpointName,
+      to: maxBreakpointName,
+      ...restProps
+    },
+    ref,
+  ) => {
+    const wrapWith = createWrapper(Box, children, restProps, ref)
 
-  // Render on explicit breakpoint
-  if (exactBreakpointName) {
-    return wrapWith(resolveBreakpoint(exactBreakpointName))
-  }
+    // Render on explicit breakpoint
+    if (exactBreakpointName) {
+      return wrapWith(resolveBreakpoint(exactBreakpointName))
+    }
 
-  const minBreakpoint = resolveBreakpoint(minBreakpointName)
-  const maxBreakpoint = resolveBreakpoint(maxBreakpointName)
+    const minBreakpoint = resolveBreakpoint(minBreakpointName)
+    const maxBreakpoint = resolveBreakpoint(maxBreakpointName)
 
-  // Bell, __/--\__
-  if (minBreakpoint && maxBreakpoint && !except) {
-    const mergedAreaRecord = mergeAreaRecords(
-      {
-        behavior: 'down',
-        breakpoint: maxBreakpoint,
-      },
-      {
-        behavior: 'up',
-        breakpoint: minBreakpoint,
-      },
-      false,
-    )
+    // Bell, __/--\__
+    if (minBreakpoint && maxBreakpoint && !except) {
+      const mergedAreaRecord = mergeAreaRecords(
+        {
+          behavior: 'down',
+          breakpoint: maxBreakpoint,
+        },
+        {
+          behavior: 'up',
+          breakpoint: minBreakpoint,
+        },
+        false,
+      )
 
-    return wrapWith(mergedAreaRecord.breakpoint)
-  }
+      return wrapWith(mergedAreaRecord.breakpoint)
+    }
 
-  // Notch, --\__/--
-  if (minBreakpoint && maxBreakpoint && except) {
-    return wrapWith(
-      closeBreakpoint(minBreakpoint),
-      openBreakpoint(maxBreakpoint),
-    )
-  }
+    // Notch, --\__/--
+    if (minBreakpoint && maxBreakpoint && except) {
+      return wrapWith(
+        closeBreakpoint(minBreakpoint),
+        openBreakpoint(maxBreakpoint),
+      )
+    }
 
-  // High-pass, __/--
-  if (minBreakpoint && !maxBreakpoint) {
-    return wrapWith(openBreakpoint(minBreakpoint))
-  }
+    // High-pass, __/--
+    if (minBreakpoint && !maxBreakpoint) {
+      return wrapWith(openBreakpoint(minBreakpoint))
+    }
 
-  // Low-pass, --\__
-  if (!minBreakpoint && maxBreakpoint) {
-    return wrapWith(closeBreakpoint(maxBreakpoint))
-  }
+    // Low-pass, --\__
+    if (!minBreakpoint && maxBreakpoint) {
+      return wrapWith(closeBreakpoint(maxBreakpoint))
+    }
 
-  // Render always when no constrains are provided
-  return <>children</>
-}
+    // Render always when no constrains are provided
+    return <>{children}</>
+  },
+)
+
+Only.displayName = 'Only'
 
 export default Only
